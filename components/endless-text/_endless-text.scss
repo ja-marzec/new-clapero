@@ -1,0 +1,44 @@
+.scroll-holder {
+  width: 100%;
+  overflow: hidden;
+}
+.scroll {
+  display: flex;
+  box-sizing: border-box;
+  border: 1px solid black;
+  // animation: bgColor 20s infinite;
+
+  p{
+    margin: 0;
+  }
+  
+  &-item{
+    animation: animate 20s linear infinite;
+    display: flex;
+    width: 100px;
+  }
+  .scroll-text{
+    padding: 5px 5px 7px 5px;
+  }
+}
+
+@keyframes animate {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-700%);
+  }
+}
+
+@keyframes bgColor {
+  0% {
+    background-color: red;
+  }
+  50% {
+    background-color: yellow;
+  }
+  100% {
+    background-color: blue;
+  }
+}
