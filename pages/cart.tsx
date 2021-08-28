@@ -8,10 +8,10 @@ const stripe = require('stripe')(process.env.NEXT_STRIPE_PRIVATE);
 
 const Cart = () => {
   const { cartContext } = useContextProvider();
+  console.log(cartContext);
+  
   // @ts-ignore
   const stripePromise = loadStripe(process.env.NEXT_STRIPE_PUBLIC);
-  const { navHeight } = useNavHeight();
-    console.log("cart",cartContext);
 
   const priceItems = cartContext.map((item:any) => {
     return {
@@ -19,6 +19,8 @@ const Cart = () => {
       quantity: 1,
     };
   });
+  console.log(priceItems);
+  
 
   async function handleOrder() {
     async function postData(url = "", data = {}) {
@@ -29,29 +31,14 @@ const Cart = () => {
       return response.json();
     }
 
+    console.log(priceItems);
     postData("/api/order", { items: priceItems }).then(async (res) => {
       const stripe = await stripePromise;
-      if(stripe !== null) {
-        const { error } = await stripe.redirectToCheckout({
-            sessionId: res.id,
-          });
-      }
-
+      console.log(res);
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: res.id,
+      });
     });
-
-    
-    // const session = await stripe.checkout.sessions.create({
-    //     payment_method_types: ['p24'],
-    //     line_items: priceItems,
-    //     mode: 'payment',
-    //     success_url: 'http://localhost:3000/success',
-    //     cancel_url: 'http://localhost:3000/cancel',
-    //   });
-
-    //   session.then(async (res) => {
-    //         console.log(res);
-    //   })
-
   }
 
   const CartContainer = () => (

@@ -5,7 +5,7 @@ const stripe = require("stripe")(process.env.NEXT_STRIPE_PRIVATE);
 
 const ProductDisplayPage = (props: any) => {
   const { productsContext, setProductsContext, cartContext } = useContextProvider();
-  // TODO - FIX LOADING
+
   useEffect(() => {
     const awaivableProducts = props.products.data.filter((el :any) => (
         !cartContext.find((rm:any) => (rm.id === el.id))

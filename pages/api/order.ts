@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.NEXT_STRIPE_PRIVATE);
 
-export default async (req :any, res: any) => {
+export default async (req, res) => {
     res.statusCode = 200;
     const {items} = JSON.parse(req.body)
 
@@ -8,8 +8,8 @@ export default async (req :any, res: any) => {
         payment_method_types: ['p24'],
         line_items: items,
         mode: 'payment',
-        success_url: `${process.env.NEXT_SERVER}/success}`,
-        cancel_url: `${process.env.NEXT_SERVER}/cancel`,
+        success_url: 'http://localhost:3000/success',
+        cancel_url: 'http://localhost:3000/cancel',
       });
         
        res.json({ id: session.id });
