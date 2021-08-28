@@ -7,6 +7,7 @@ import { FullWidthImage } from "../components/full-width-image/full-width-image"
 import { ProductsDisplay } from "../components/products-display/products-display";
 import { useContextProvider } from "../context/Context";
 import { dataFetching } from "../utils/client";
+const stripe = require("stripe")(process.env.NEXT_STRIPE_PRIVATE);
 
 const Home: NextPage = (props: any) => {
   const { productsContext, cartContext, setProductsContext } = useContextProvider();
@@ -33,10 +34,9 @@ const Home: NextPage = (props: any) => {
 export default Home;
 
 export async function getServerSideProps() {
-  const prod = await fetch(`${process.env.NEXT_SERVER}/api/products`);
-  const json = await prod.json();
+  const products = await stripe.products.list();
 
   return {
-    props: { productsData: json.data },
+    props: { productsData: products.data },
   };
 }

@@ -3,7 +3,6 @@ const path = require("path");
 const withSass = require("@zeit/next-sass");
 module.exports = withSass({
   reactStrictMode: true,
-
   cssModules: true,
 });
 

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { ProductsDisplay } from "../components/products-display/products-display";
 import { useContextProvider } from "../context/Context";
+const stripe = require("stripe")(process.env.NEXT_STRIPE_PRIVATE);
 
 const ProductDisplayPage = (props: any) => {
   const { productsContext, setProductsContext, cartContext } = useContextProvider();
@@ -21,19 +22,9 @@ const ProductDisplayPage = (props: any) => {
 export default ProductDisplayPage;
 
 export async function getServerSideProps() {
-//   const { loaded } = context.query;
-  // TODO - improve dataFetching
-  // const dupa  = dataFetching("/api/products", FUN )
-//   if (loaded === true) {
-//     return {
-//       props: { loaded: true },
-//     };
-//   }
-
-  const prod = await fetch(`${process.env.NEXT_SERVER}/api/products`);
-  const json = await prod.json();
+    const products = await stripe.products.list();
 
   return {
-    props: { products: json.data },
+    props: { products },
   };
 }

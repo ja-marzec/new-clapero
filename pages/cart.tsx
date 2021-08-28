@@ -3,8 +3,8 @@ import { ProductsDisplay } from "../components/products-display/products-display
 import { useContextProvider } from "../context/Context";
 import { loadStripe } from "@stripe/stripe-js";
 import { useNavHeight } from "../utils/nav-height";
-import { CenteredContent } from "../components/centered-content/centered-content";
 import Image from "next/image";
+const stripe = require('stripe')(process.env.NEXT_STRIPE_PRIVATE);
 
 const Cart = () => {
   const { cartContext } = useContextProvider();
@@ -13,7 +13,7 @@ const Cart = () => {
   const { navHeight } = useNavHeight();
     console.log("cart",cartContext);
 
-  const priceItems = cartContext.map((item) => {
+  const priceItems = cartContext.map((item:any) => {
     return {
       price: item.metadata.price,
       quantity: 1,
@@ -31,10 +31,27 @@ const Cart = () => {
 
     postData("/api/order", { items: priceItems }).then(async (res) => {
       const stripe = await stripePromise;
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: res.id,
-      });
+      if(stripe !== null) {
+        const { error } = await stripe.redirectToCheckout({
+            sessionId: res.id,
+          });
+      }
+
     });
+
+    
+    // const session = await stripe.checkout.sessions.create({
+    //     payment_method_types: ['p24'],
+    //     line_items: priceItems,
+    //     mode: 'payment',
+    //     success_url: 'http://localhost:3000/success',
+    //     cancel_url: 'http://localhost:3000/cancel',
+    //   });
+
+    //   session.then(async (res) => {
+    //         console.log(res);
+    //   })
+
   }
 
   const CartContainer = () => (

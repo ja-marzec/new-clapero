@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { useContextProvider } from "../../context/Context";
 import { useNavHeight } from "../../utils/nav-height";
-import { CenteredContent } from "../../components/centered-content/centered-content";
+const stripe = require("stripe")(process.env.NEXT_STRIPE_PRIVATE);
 
 
 const ProductDisplay = ({ prod } : any) => {
@@ -10,7 +10,7 @@ const ProductDisplay = ({ prod } : any) => {
   const { cartContext, setCartContext } = useContextProvider();
 
 useEffect(() => {
-    const cartIds = cartContext.map(item => item.id)
+    const cartIds = cartContext.map((item: any) => item.id)
     if(cartIds.includes(prod.id)) {
         setIsInCart(true)
     } else {
@@ -31,7 +31,7 @@ useEffect(() => {
         <button
         className="prod-button  btn btn-warning"
         onClick={() => {
-            const newCart = cartContext.filter(item => item.id !== prod.id)
+            const newCart = cartContext.filter((item: any) => item.id !== prod.id)
             console.log(newCart);
             setCartContext(newCart);
         }}
@@ -42,8 +42,6 @@ useEffect(() => {
 
   return (
     <>
-        <CenteredContent >
-
       <div className="container mt-5">
         <div className="row">
           <div className="col-12 col-sm-6">
@@ -63,8 +61,6 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      </CenteredContent >
-
     </>
   );
 };
@@ -72,10 +68,9 @@ useEffect(() => {
 export default ProductDisplay;
 
 export async function getStaticPaths() {
-    const res = await fetch(`http://localhost:3000/api/products`);
-    const data = await res.json();
+    const products = await stripe.products.list();
   
-    const paths = data.data.map((item:any) => {
+    const paths = products.data.map((item:any) => {
       return {
         params: { id: item.id.toString() },
       };
@@ -88,13 +83,15 @@ export async function getStaticPaths() {
   }
   
   export const getStaticProps = async (context:any) => {
+
     const { id } = context.params;
-    const res = await fetch(`${process.env.NEXT_SERVER}/api/product-info?id=${id}`);
-    const data = await res.json();
+    const product = await stripe.products.retrieve(
+        id
+      );
   
     return {
       props: {
-        prod: data,
+        prod: product,
       },
     };
   };
