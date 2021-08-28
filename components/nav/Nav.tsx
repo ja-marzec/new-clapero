@@ -25,7 +25,7 @@ export const Nav = () => {
             href={"/"}
           >
               <a className="cursor-pointer">
-              <Image src={"/../public/brand/logo.png"} height={30} width={100} />
+              <Image src={"/brand/logo.png"} height={30} width={100} />
               </a>
           </Link>
         </li>

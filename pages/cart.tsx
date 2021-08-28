@@ -35,9 +35,11 @@ const Cart = () => {
     postData("/api/order", { items: priceItems }).then(async (res) => {
       const stripe = await stripePromise;
       console.log(res);
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: res.id,
-      });
+      if(stripe !== null) {
+        const { error } = await stripe.redirectToCheckout({
+            sessionId: res.id,
+          });
+      }
     });
   }
 

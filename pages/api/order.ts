@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.NEXT_STRIPE_PRIVATE);
 
-export default async (req, res) => {
+export default async (req:any, res:any) => {
     res.statusCode = 200;
     const {items} = JSON.parse(req.body)
 
